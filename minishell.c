@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anlima <anlima@student.42lisboa.com>       +#+  +:+       +#+        */
+/*   By: mpedroso <mpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 20:47:34 by anlima            #+#    #+#             */
-/*   Updated: 2023/10/17 18:00:41 by anlima           ###   ########.fr       */
+/*   Updated: 2023/10/20 21:22:30 by mpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,11 @@ int	main(int argc, char **argv, char **env)
 			continue ;
 		lexer();
 		add_history(term()->command);
+		if (term()->exit_flag)
+		{
+			term()->exit_flag = 0;
+			g_exit = 127;
+		}
 		clean_mallocs();
 		remove(HERETXT);
 	}

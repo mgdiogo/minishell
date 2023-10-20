@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_executor.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anlima <anlima@student.42lisboa.com>       +#+  +:+       +#+        */
+/*   By: mpedroso <mpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 15:35:02 by anlima            #+#    #+#             */
-/*   Updated: 2023/10/19 21:31:04 by anlima           ###   ########.fr       */
+/*   Updated: 2023/10/20 21:13:07 by mpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,7 @@ void	executor(void)
 
 void	execute_builtin(t_command *cmd)
 {
-	if (ft_strncmp(cmd->name, "$?", 2) == 0)
-		printf("%i\n", g_exit);
-	else if (ft_strncmp(cmd->name, "exit", 5) == 0)
+	if (ft_strncmp(cmd->name, "exit", 5) == 0)
 		execute_exit(&cmd->args[1]);
 	else if (ft_strncmp(cmd->name, "echo", 5) == 0)
 	{
@@ -76,23 +74,28 @@ void	handle_commands(int i, int fd_out, int *fd_in, pid_t *child_pids)
 	{
 		if (term()->cmd_list[i].name)
 		{
+			set_pipes(*fd_in, fd_out);
 			execute_red(&term()->cmd_list[i]);
-			dup2(fd_out, STDOUT_FILENO);
-			close(fd_out);
+			if (*fd_in != STDIN_FILENO)
+				close(*fd_in);
+			if (fd_out != STDOUT_FILENO)
+				close(fd_out);
 		}
 	}
 	else if (i < term()->count_cmd - 1)
 	{
 		create_pipe();
 		child_pids[i] = create_fork(&term()->cmd_list[i], *fd_in,
-			term()->pipe_fd[1]);
+				term()->pipe_fd[1]);
 		close(term()->pipe_fd[1]);
+		if (*fd_in != STDIN_FILENO)
+			close(*fd_in);
 		*fd_in = term()->pipe_fd[0];
 	}
 	else
 	{
 		child_pids[i] = create_fork(&term()->cmd_list[i], *fd_in,
-			STDOUT_FILENO);
+				STDOUT_FILENO);
 		if (*fd_in != STDIN_FILENO)
 			close(*fd_in);
 	}

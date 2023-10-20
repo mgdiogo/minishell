@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anlima <anlima@student.42lisboa.com>       +#+  +:+       +#+        */
+/*   By: mpedroso <mpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 20:48:28 by anlima            #+#    #+#             */
-/*   Updated: 2023/10/20 11:57:33 by anlima           ###   ########.fr       */
+/*   Updated: 2023/10/20 20:03:09 by mpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ typedef struct s_term
 {
 	int					count_cmd;
 	int					pipe_fd[2];
+	int					exit_flag;
 	char				*user;
 	char				*home;
 	char				*command;
@@ -126,8 +127,8 @@ char					**ft_split_pipes(char *input);
 void					add_red(char **cmd_list, char *value);
 void					add_argument(t_command *cmd, char *value);
 void					add_command(t_command *cmd, t_token **tokens);
-// parser
-void					lexer(void);
+	// parser
+void 					lexer(void);
 void					parser(void);
 // parsing_utils
 int						count_pipes(char *input);
@@ -149,8 +150,8 @@ void					tokenize_input(void);
 int						count_words(char *input);
 void					add_token(char *input, int *i, int flag);
 void					set_token_type(t_token *token, char *input, int flag);
-void					add_tokens_from_command(char *command,
-							int *token_index);
+void	add_tokens_from_command(char *command,
+								int *token_index);
 // free memory
 void					clean_mallocs(void);
 void					free_token(t_token *token);

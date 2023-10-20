@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_management.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anlima <anlima@student.42lisboa.com>       +#+  +:+       +#+        */
+/*   By: mpedroso <mpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 15:37:42 by anlima            #+#    #+#             */
-/*   Updated: 2023/10/18 16:26:49 by anlima           ###   ########.fr       */
+/*   Updated: 2023/10/20 21:26:43 by mpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,14 @@ void	set_pipes(int fd_in, int fd_out)
 {
 	if (fd_in != STDIN_FILENO)
 	{
-		dup2(fd_in, STDIN_FILENO);
+		if (dup2(fd_in, STDIN_FILENO) == -1)
+			perror("dup2 fd_in error");
 		close(fd_in);
 	}
 	if (fd_out != STDOUT_FILENO)
 	{
-		dup2(fd_out, STDOUT_FILENO);
+		if (dup2(fd_out, STDOUT_FILENO) == -1)
+			perror("dup2 fd_out error");
 		if (fd_out != term()->pipe_fd[1])
 			close(fd_out);
 	}
